@@ -2,17 +2,18 @@
   "name": "ecs-fargate-nrpc-poc",
   "version": "0.1.0",
   "bin": {
-    "ecs-fargate-nrpc-poc": "bin/ecs-fargate-nrpc-poc.js"
+    "cdk": "bin/index.js"
   },
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
-    "cdk": "cdk"
+    "cdk": "cdk",
+    "deploy:all": "cdk deploy Poc* --require-approval never"
   },
   "devDependencies": {
-    "aws-cdk": "1.27.0",
-    "@aws-cdk/assert": "1.27.0",
+    "aws-cdk": "^1.30.0",
+    "@aws-cdk/assert": "^1.30.0",
     "@types/jest": "^24.0.22",
     "@types/node": "10.17.5",
     "jest": "^24.9.0",
@@ -21,9 +22,11 @@
     "typescript": "~3.7.2"
   },
   "dependencies": {
-    "@aws-cdk/aws-sns": "1.27.0",
-    "@aws-cdk/aws-sns-subscriptions": "1.27.0",
-    "@aws-cdk/aws-sqs": "1.27.0",
-    "@aws-cdk/core": "1.27.0"
+    "@aws-cdk/aws-ec2": "^1.30.0",
+    "@aws-cdk/aws-ecs": "^1.30.0",
+    "@aws-cdk/aws-ecs-patterns": "^1.30.0",
+    "@aws-cdk/aws-elasticloadbalancingv2": "^1.30.0",
+    "@aws-cdk/aws-servicediscovery": "^1.30.0",
+    "@aws-cdk/core": "^1.30.0"
   }
 }

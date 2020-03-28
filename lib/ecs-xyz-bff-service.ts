@@ -1,11 +1,10 @@
 import * as cdk from "@aws-cdk/core";
+import * as ec2 from "@aws-cdk/aws-ec2";
 import * as ecs from "@aws-cdk/aws-ecs";
-import * as ecs_patterns from "@aws-cdk/aws-ecs-patterns";
 import * as cloudmap from "@aws-cdk/aws-servicediscovery";
 
 export interface ExtendedStackProps extends cdk.StackProps {
   cluster: ecs.Cluster;
-  cloudMapNamespace: cloudmap.PrivateDnsNamespace;
 }
 
 export class EcsXyzBffServiceStack extends cdk.Stack {
@@ -18,33 +17,51 @@ export class EcsXyzBffServiceStack extends cdk.Stack {
       streamPrefix: "poc"
     });
 
-    new ecs_patterns.ApplicationLoadBalancedFargateService(
+    const taskDef = new ecs.FargateTaskDefinition(
       this,
-      "poc-xyz-bff-service",
+      "poc-xyz-bff-task-def",
       {
-        serviceName: "poc-xyz-bff-service",
-        cluster: props.cluster,
-        cpu: 256,
-        memoryLimitMiB: 512,
-        desiredCount: 3,
-        cloudMapOptions: {
-          name: "poc-xyz-bff-service",
-          cloudMapNamespace: props.cloudMapNamespace,
-          failureThreshold: 10
-        },
-        taskImageOptions: {
-          family: "poc-xyz-bff-task",
-          image: ecs.ContainerImage.fromAsset("./containers/xyz-bff"),
-          containerName: "poc-xyz-bff-container",
-          containerPort: PORT,
-          enableLogging: true,
-          logDriver: logDriver,
-          environment: {
-            NODE_ENV: "production"
-          }
-        },
-        publicLoadBalancer: false
+        family: "poc-xyz-bff-task"
       }
     );
+
+    const container = taskDef.addContainer("poc-xyz-bff-container", {
+      image: ecs.ContainerImage.fromAsset("./containers/xyz-bff"),
+      memoryLimitMiB: 512,
+      cpu: 256,
+      logging: logDriver,
+      environment: {
+        NODE_ENV: "production"
+      }
+    });
+
+    container.addPortMappings({
+      containerPort: PORT,
+      hostPort: PORT,
+      protocol: ecs.Protocol.TCP
+    });
+
+    const sg = new ec2.SecurityGroup(this, "poc-xyz-bff-service-sg", {
+      securityGroupName: "poc-xyz-bff-service-sg",
+      vpc: props.cluster.vpc,
+      allowAllOutbound: true
+    });
+    sg.addIngressRule(ec2.Peer.anyIpv4(), ec2.Port.tcp(PORT));
+
+    const service = new ecs.FargateService(this, "poc-xyz-bff-service", {
+      serviceName: "poc-xyz-bff-service",
+      cluster: props.cluster,
+      assignPublicIp: false,
+      taskDefinition: taskDef,
+      desiredCount: 3,
+      securityGroup: sg,
+      deploymentController: { type: ecs.DeploymentControllerType.ECS }
+    });
+
+    service.enableCloudMap({
+      name: "poc-xyz-bff-service",
+      dnsRecordType: cloudmap.DnsRecordType.A,
+      dnsTtl: cdk.Duration.seconds(60)
+    });
   }
 }

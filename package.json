@@ -9,7 +9,8 @@
     "watch": "tsc -w",
     "test": "jest",
     "cdk": "cdk",
-    "deploy:all": "cdk deploy Poc* --require-approval never"
+    "deploy:all": "cdk deploy Poc* --require-approval never",
+    "test:load": "k6 run --vus 1000 --duration 30s --rps 50 test/load.js"
   },
   "devDependencies": {
     "aws-cdk": "^1.30.0",

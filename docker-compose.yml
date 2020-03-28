@@ -4,7 +4,7 @@ services:
     build:
       context: ./containers/nrpc
     ports:
-      - 8080:80
+      - 9080:80
     networks:
       - poc
     depends_on:
@@ -13,7 +13,7 @@ services:
     build:
       context: ./containers/xyz-bff
     ports:
-      - 9080:80
+      - 9090:80
     networks:
       - poc
 

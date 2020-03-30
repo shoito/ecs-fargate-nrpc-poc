@@ -8,12 +8,20 @@ services:
     networks:
       - poc
     depends_on:
-      - bff
-  bff:
+      - xyz-bff
+      - abc-bff
+  xyz-bff:
     build:
       context: ./containers/xyz-bff
     ports:
-      - "3000"
+      - "13000:3000"
+    networks:
+      - poc
+  abc-bff:
+    build:
+      context: ./containers/abc-bff
+    ports:
+      - "23000:3000"
     networks:
       - poc
 

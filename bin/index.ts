@@ -5,6 +5,7 @@ import { AlbStack } from "../lib/alb";
 import { EcsClusterStack } from "../lib/ecs-cluster";
 import { EcsNrpcServiceStack } from "../lib/ecs-nrpc-service";
 import { EcsXyzBffServiceStack } from "../lib/ecs-xyz-bff-service";
+import { EcsAbcBffServiceStack } from "../lib/ecs-abc-bff-service";
 
 const app = new cdk.App();
 const vpcStack = new VpcStack(app, "PocVpcStack");
@@ -19,6 +20,13 @@ const ecsXyzBffServiceStack = new EcsXyzBffServiceStack(
     cluster: ecsClusterStack.cluster
   }
 );
+const ecsAbcBffServiceStack = new EcsAbcBffServiceStack(
+  app,
+  "PocEcsAbcBffServiceStack",
+  {
+    cluster: ecsClusterStack.cluster
+  }
+);
 const ecsNrpcServiceStack = new EcsNrpcServiceStack(
   app,
   "PocEcsNrpcServiceStack",
@@ -28,3 +36,4 @@ const ecsNrpcServiceStack = new EcsNrpcServiceStack(
   }
 );
 ecsNrpcServiceStack.addDependency(ecsXyzBffServiceStack);
+ecsNrpcServiceStack.addDependency(ecsAbcBffServiceStack);

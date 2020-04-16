@@ -70,7 +70,7 @@ http {
   # # キャッシュのファイルパスとパラメータ。最大キャッシュサイズやキャッシュ期間など。
   # # http://nginx.org/en/docs/http/ngx_http_proxy_module.html
   # # A 1‑MB zone can store data for about 8,000 keys
-  # proxy_cache_path /var/cache/nginx/cache levels=1:2 keys_zone=bff_cache:16m max_size=3g inactive=30m;
+  # proxy_cache_path /var/cache/nginx/cache levels=1:2 keys_zone=bff:16m max_size=3g inactive=30m;
 
   # WebSocket対応のためUpgrade
   # プロキシのHTTPプロトコルバージョン(デフォルト:1.0)
@@ -115,7 +115,7 @@ http {
       # proxy_ignore_headers X-Accel-Expires Cache-Control Expires;
 
       # # キャッシュキーゾーン名s
-      # proxy_cache bff_cache;
+      # proxy_cache bff;
       # # キャッシュキーとしてこれをmd5化したものを使う
       # proxy_cache_key "$scheme$proxy_host$request_uri";
       # # キャッシュ対象のHTTPステータスとキャッシュ時間

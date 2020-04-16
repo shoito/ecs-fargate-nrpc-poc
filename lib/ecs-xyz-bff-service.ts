@@ -51,6 +51,7 @@ export class EcsXyzBffServiceStack extends cdk.Stack {
     const service = new ecs.FargateService(this, "poc-xyz-bff-service", {
       serviceName: "poc-xyz-bff-service",
       cluster: props.cluster,
+      platformVersion: ecs.FargatePlatformVersion.LATEST, // FIXME to VERSION1_4
       assignPublicIp: false,
       taskDefinition: taskDef,
       desiredCount: 3,

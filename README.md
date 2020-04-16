@@ -8,7 +8,7 @@
 npm i
 npm run build
 cdk bootstrap
-npm run deploy:all
+npm run deploy
 ```
 
 ## Load testing
@@ -21,6 +21,14 @@ brew install k6
 
 ### Running
 
+`cdk deploy` によりデプロイされたエンドポイントになるように `test/load.js` の `BASE_PATH` を修正して、下記を実行する。  
+
 ```sh
 npm run test:load
+```
+
+## Cleanup
+
+```sh
+npm run destroy
 ```

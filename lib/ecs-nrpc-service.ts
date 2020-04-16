@@ -46,6 +46,7 @@ export class EcsNrpcServiceStack extends cdk.Stack {
     const service = new ecs.FargateService(this, "poc-nrpc-service", {
       serviceName: "poc-nrpc-service",
       cluster: props.cluster,
+      platformVersion: ecs.FargatePlatformVersion.LATEST, // FIXME to VERSION1_4
       assignPublicIp: false,
       taskDefinition: taskDef,
       desiredCount: 2,

@@ -14,7 +14,7 @@
     "test:load": "k6 run --vus 1000 --duration 30s --rps 50 test/load.js"
   },
   "devDependencies": {
-    "aws-cdk": "^1.30.0",
+    "aws-cdk": "^1.174.0",
     "@aws-cdk/assert": "^1.30.0",
     "@types/jest": "^24.0.22",
     "@types/node": "10.17.5",
